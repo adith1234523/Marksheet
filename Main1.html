@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark Sheet</title>
+    
+    <style>
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+  margin: 0;
+  padding: 0;
+}
+
+.marksheet-container {
+  background: white;
+  width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: relative;
+}
+
+.college-logo {
+  width: 100px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.header p {
+  margin: 0;
+}
+
+.student-details,
+.footer,
+.date {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #000;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date {
+  text-align: right;
+  margin-top: 10px;
+}
+
+h4 {
+  margin: 0;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="marksheet-container">
+      <div class="header">
+        <h1>All India Institute of Fire Technology and Safety Management</h1>
+        <p>
+          (Approved with Technical and Paramedical Education Development and
+          Management Council)
+        </p>
+        <h2>Annual Statement of Marks</h2>
+      </div>
+      <div class="student-details">
+        <table>
+          <tr>
+            <td colspan="2">
+              <b> Stud Name</b> <br />
+              <h4 class="name">std name</h4>
+            </td>
+            <td>
+              <b>Course name with Code</b> <br />
+              <h4 class="code">122445</h4>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>roll number</b>
+              <h5 class="rollno"></h5>
+            </td>
+            <td>
+              <b>Enrollment no</b>
+              <h5 class="enrollno"></h5>
+            </td>
+            <td>
+              <b>Authorised Training center name with code</b>
+              <h5 class="center"></h5>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Subject</th>
+            <th>Internal</th>
+            <th>External</th>
+            <th>Total</th>
+            <th>Grade</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody id="marksTable">
+          <!-- Data will be inserted here by JavaScript -->
+        </tbody>
+      </table>
+      <div class="footer">
+        <p><strong>Total Marks:</strong> <span id="totalMarks">0</span></p>
+        <p><strong>Percentage:</strong> <span id="percentage">0%</span></p>
+        <p><strong>Grade:</strong> <span id="grade">[Grade]</span></p>
+        <p><strong>Result:</strong> <span id="result">[Result]</span></p>
+      </div>
+      <div class="date">
+        <p><strong>Date:</strong> <span id="dateOfResult">[Date]</span></p>
+      </div>
+    </div>
+    <script>
+
+      // Sample data
+const marksData = [
+  {
+    code: "DFS102",
+    subject: "Fire Services and Technology",
+    internal: 30,
+    external: 70,
+  },
+  { code: "DFS103", subject: "Industrial Safety", internal: 40, external: 60 },
+  {
+    code: "DFS104",
+    subject: "Fire Drills & Safety",
+    internal: 35,
+    external: 65,
+  },
+  {
+    code: "DFS105",
+    subject: "Environmental Safety",
+    internal: 28,
+    external: 72,
+  },
+  {
+    code: "DFS106",
+    subject: "Disaster Management",
+    internal: 25,
+    external: 75,
+  },
+  {
+    code: "DFS107",
+    subject: "Construction Safety",
+    internal: 45,
+    external: 55,
+  },
+];
+
+// Calculate total, percentage, and grade
+let totalMarks = 0;
+let maxMarks = 600;
+let grade = "";
+let result = "Pass";
+const marksTable = document.getElementById("marksTable");
+
+marksData.forEach((mark) => {
+  const total = mark.internal + mark.external;
+  totalMarks += total;
+
+  // Calculate grade
+  let subjectGrade = "";
+  if (total >= 90) subjectGrade = "A+";
+  else if (total >= 80) subjectGrade = "A";
+  else if (total >= 70) subjectGrade = "B";
+  else if (total >= 60) subjectGrade = "C";
+  else if (total >= 50) subjectGrade = "D";
+  else {
+    subjectGrade = "F";
+    result = "Fail";
+  }
+
+  // Add row to the table
+  marksTable.innerHTML += `
+        <tr>
+            <td>${mark.code}</td>
+            <td>${mark.subject}</td>
+            <td>${mark.internal}</td>
+            <td>${mark.external}</td>
+            <td>${total}</td>
+            <td>${subjectGrade}</td>
+            <td>${result}</td>
+        </tr>
+    `;
+});
+
+// Calculate overall percentage and grade
+const percentage = (totalMarks / maxMarks) * 100;
+if (percentage >= 90) grade = "A+";
+else if (percentage >= 80) grade = "A";
+else if (percentage >= 70) grade = "B";
+else if (percentage >= 60) grade = "C";
+else if (percentage >= 50) grade = "D";
+else grade = "F";
+
+// Update HTML with calculated values
+document.getElementById("totalMarks").innerText = totalMarks;
+document.getElementById("percentage").innerText = `${percentage.toFixed(2)}%`;
+document.getElementById("grade").innerText = grade;
+document.getElementById("result").innerText = result;
+
+// Set other student details (use real data in production)
+document.getElementById("candidateName").innerText = "John Doe";
+document.getElementById("registrationNumber").innerText = "123456";
+document.getElementById("enrollmentNumber").innerText = "654321";
+document.getElementById("dateOfResult").innerText = "May 2023";
+
+    </script>
+  </body>
+</html>
